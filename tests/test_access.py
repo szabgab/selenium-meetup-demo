@@ -18,3 +18,19 @@ def test_homepage(browser):
 
     header = headers[0]
     assert len(header.text) > 2
+
+    category_cards = browser.find_elements_by_css_selector('[data-testid="category-card"]')
+    assert len(category_cards) > 1
+
+    for card in category_cards:
+        img = card.find_element_by_css_selector('img')
+        assert img is not None
+
+        image_was_loaded = browser.execute_script(
+           "return arguments[0].complete && "+
+            "typeof arguments[0].naturalWidth != \"undefined\" && "+
+            "arguments[0].naturalWidth > 0", img)
+
+
+        assert image_was_loaded is True, img.get_attribute('src')
+
